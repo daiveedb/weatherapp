@@ -16,7 +16,7 @@ const City = ({item}) => {
                 <h3 className='font-extrabold text-base sm:text-lg py-[2px] tracking-wide'>{item.cityName}</h3>
                 <p className='text-xs font-extralight tracking-tighter'>{item.country}</p>
                 <p className='text-xs sm:text-sm font-semibold text-gray-500 capitalize'>{item.weatherDescription}</p>
-                <p className='text-xs'>{item.population}</p>
+                {/* <p className='text-xs'>{item.population}</p> */}
             </div>
             <div className='flex flex-1 justify-end items-center'>
                 <img className='w-[50%] sm:w-[70%] pr-2 sm:pr-3 rounded-l-lg' src={iconUrl} alt="" /> 
