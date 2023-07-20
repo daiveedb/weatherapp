@@ -3,12 +3,13 @@ import React, { useEffect, useState } from 'react'
 import City from './City';
 
 
-const Cities = () => {
+const Cities = ({isSorted}) => {
     
+    const [initialCities, setInitialCities] = useState([])
     const [citiesWithInfo, setCitiesWithInfo] = useState([])
 
     const getCities = async () => {
-        const url = 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities?types=city&minPopulation=2000000&limit=4&sort=-population';
+        const url = 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities?types=city&minPopulation=2000000&limit=4&sort=name';
         const options = {
             method: 'GET',
             headers: {
@@ -72,6 +73,7 @@ const Cities = () => {
         const long = item.longitude
         const cityName = item.city
         const country = item.country
+        const population = item.population
         const weatherDetails = await getWeather(lat,long)
         const cityImages = await getCityImages(cityName)
 
@@ -80,6 +82,8 @@ const Cities = () => {
             cityName:cityName,
             country:country,
             temperature:weatherDetails.main.temp,
+            population:population,
+
             weatherDescription: weatherDetails.weather[0].description,
             iconUrl:weatherDetails.weather[0].icon,
             cityImages:{
@@ -92,13 +96,63 @@ const Cities = () => {
         return res
     }
 
+    const sortWeatherInfoForCities = (sortBy) =>{
+
+        switch (sortBy) {
+            case 'temperature':
+                var key = 'temperature'
+                var listCopy = [...citiesWithInfo].sort((a,b) =>{
+                    return a[key] - b[key]
+                })
+                setCitiesWithInfo(listCopy)
+                break;
+
+            case 'temperature reversed':
+                var key = 'temperature'
+                var listCopy = [...citiesWithInfo].sort((a,b) =>{
+                    return  b[key] - a[key]
+                })
+                setCitiesWithInfo(listCopy)
+                break;
+
+            case 'population':
+                var key = 'population'
+                var listCopy = [...citiesWithInfo].sort((a,b) =>{
+                    return   a[key] - b[key]
+                })
+                setCitiesWithInfo(listCopy)
+                break;
+
+            case 'population reversed':
+                var key = 'population'
+                var listCopy = [...citiesWithInfo].sort((a,b) =>{
+                    return  b[key] - a[key]
+                })
+                setCitiesWithInfo(listCopy)
+                break;
+            default:
+                break;
+        }
+    }
+
     const fetchWeatherDetails = async () => {
         const cities = await getCities()
         const weatherInfoForCities = await getWeatherInfoForCities(cities)
+        setInitialCities(weatherInfoForCities)
         setCitiesWithInfo(weatherInfoForCities)
+       
     }
 
     useEffect(() => fetchWeatherDetails,[])
+    useEffect(() => { 
+        if (isSorted.isSorted == false){
+            setCitiesWithInfo(initialCities)
+        }
+        else{
+            sortWeatherInfoForCities(isSorted.sortBy)
+        }
+       
+    }, [isSorted])
 
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 justify-items-center gap-5 md:gap-8'>
