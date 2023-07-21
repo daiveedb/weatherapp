@@ -1,4 +1,3 @@
-import { data } from 'autoprefixer';
 import React, { useEffect, useState } from 'react'
 import City from './City';
 import Filter from './Filter';
@@ -107,6 +106,15 @@ const Cities = ({isSorted}) => {
     const sortWeatherInfoForCities = (sortBy) =>{
 
         switch (sortBy) {
+
+            case 'default':
+                var key = 'cityName'
+                var listCopy = [...citiesWithInfo].sort((a,b) =>{
+                    return a[key].localeCompare(b[key])
+                })
+                setCitiesWithInfo(listCopy)
+                break;
+
             case 'temperature':
                 var key = 'temperature'
                 var listCopy = [...citiesWithInfo].sort((a,b) =>{
@@ -152,6 +160,10 @@ const Cities = ({isSorted}) => {
     }
 
     const filterWeatherInfoForCities = (filterBy) => {
+
+        const selectElement = document.getElementById('sortSelect')
+        selectElement.value = 'default'
+
 
         switch (filterBy) {
             case 'clear sky' :
@@ -228,13 +240,7 @@ const Cities = ({isSorted}) => {
     useEffect(() => fetchWeatherDetails,[])
 
     useEffect(() => { 
-        if (isSorted.isSorted == false){
-            setCitiesWithInfo(initialCities)
-        }
-        else{
             sortWeatherInfoForCities(isSorted.sortBy)
-        }
-       
     }, [isSorted])
 
     useEffect(() => {

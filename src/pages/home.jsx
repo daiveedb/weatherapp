@@ -5,14 +5,12 @@ import Cities from '../components/Cities'
 const Home = () => {
 
   const [isSorted, setIsSorted] = useState({
-    isSorted:false,
     sortBy:"default"
   })
 
-  const updateSorted = (bool,string) =>{
+  const updateSorted = (sortBy) =>{
     setIsSorted({
-      isSorted:bool,
-      sortBy:string,
+      sortBy:sortBy,
     })
   }
 
