@@ -5,6 +5,8 @@ import Search from './Search';
 
 
 const Cities = ({isSorted}) => {
+
+    const [searchValue, setSearchValue] = useState('')
     
     const [isFiltered, setIsFiltered]= useState({
         isFiltered:false,
@@ -13,8 +15,11 @@ const Cities = ({isSorted}) => {
     const [initialCities, setInitialCities] = useState([])
     const [citiesWithInfo, setCitiesWithInfo] = useState([])
 
+
+    // getting alist of popular cities
+
     const getCities = async () => {
-        const url = 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities?types=city&minPopulation=2000000&limit=10&sort=name';
+        const url = 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities?types=city&minPopulation=2000000&limit=&sort=name';
         const options = {
             method: 'GET',
             headers: {
@@ -32,6 +37,8 @@ const Cities = ({isSorted}) => {
         }
     }
 
+    // getting actual weather for cities generated
+
     const getWeather = async (lat,long) => {
         const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=dcdc4d244bb99171abc7072ad680346c&units=metric`;
         try {
@@ -42,6 +49,8 @@ const Cities = ({isSorted}) => {
             console.error(error);
         }
     }
+
+    // get city images for each city
 
     const getCityImages = async (cityName) => {
 
@@ -69,6 +78,9 @@ const Cities = ({isSorted}) => {
             throw new Error('Failed to fetch city image: ' + error.message);
           }
     }
+
+
+    // set weather info we need for cities generated including images and weather
 
     const getWeatherInfoForCities = async (cities) =>{
 
@@ -102,6 +114,8 @@ const Cities = ({isSorted}) => {
 
         return res
     }
+
+    // sort cities by dropdown selecr
 
     const sortWeatherInfoForCities = (sortBy) =>{
 
@@ -151,6 +165,8 @@ const Cities = ({isSorted}) => {
         }
     }
 
+    // handling update on fiters factor
+
     const updateFiltered = (bool,string) =>{
         setIsFiltered({
             isFiltered:bool,
@@ -159,7 +175,9 @@ const Cities = ({isSorted}) => {
 
     }
 
-    const filterWeatherInfoForCities = (filterBy) => {
+    // filter cities based on dropdown select
+
+    const filterWeatherInfoForCities = (searchedList,filterBy) => {
 
         const selectElement = document.getElementById('sortSelect')
         selectElement.value = 'default'
@@ -167,7 +185,7 @@ const Cities = ({isSorted}) => {
 
         switch (filterBy) {
             case 'clear sky' :
-                var listCopy = [...initialCities].filter((item)=>{
+                var listCopy = [...searchedList].filter((item)=>{
                     var weatherId = item.weatherId
                     var weatherIdAsString = Math.abs(weatherId).toString()
                     var firstDigitOfWeatherId = weatherIdAsString[0]
@@ -179,19 +197,19 @@ const Cities = ({isSorted}) => {
 
 
             case 'rain' :
-                var listCopy = [...initialCities].filter((item)=>{
+                var listCopy = [...searchedList].filter((item)=>{
                     var weatherId = item.weatherId
                     var weatherIdAsString = Math.abs(weatherId).toString()
                     var firstDigitOfWeatherId = weatherIdAsString[0]
 
-                    return firstDigitOfWeatherId === '5'     
+                    return firstDigitOfWeatherId === '5' || firstDigitOfWeatherId === '3'    
                 })
                 setCitiesWithInfo(listCopy)
                 break;
 
 
             case 'thunderstorm' :
-                var listCopy = [...initialCities].filter((item)=>{
+                var listCopy = [...searchedList].filter((item)=>{
                     var weatherId = item.weatherId
                     var weatherIdAsString = Math.abs(weatherId).toString()
                     var firstDigitOfWeatherId = weatherIdAsString[0]
@@ -203,7 +221,7 @@ const Cities = ({isSorted}) => {
 
 
             case 'snow' :
-                var listCopy = [...initialCities].filter((item)=>{
+                var listCopy = [...searchedList].filter((item)=>{
                     var weatherId = item.weatherId
                     var weatherIdAsString = Math.abs(weatherId).toString()
                     var firstDigitOfWeatherId = weatherIdAsString[0]
@@ -215,7 +233,7 @@ const Cities = ({isSorted}) => {
 
 
             case 'other' :
-                var listCopy = [...initialCities].filter((item)=>{
+                var listCopy = [...searchedList].filter((item)=>{
                     var weatherId = item.weatherId
                     var weatherIdAsString = Math.abs(weatherId).toString()
                     var firstDigitOfWeatherId = weatherIdAsString[0]
@@ -229,6 +247,29 @@ const Cities = ({isSorted}) => {
         }
     }
 
+    // update search state
+
+    const updateSearch = (e) => {
+        setSearchValue(e)
+    }
+
+    // filter by search
+
+    const filterForSearchedCities = (searchValue) => {
+
+        const selectElement = document.getElementById('sortSelect')
+        selectElement.value = 'default'
+
+
+        var listCopy = [...initialCities].filter((item) => {
+            return item.cityName.toLowerCase().includes(searchValue.toLowerCase())
+        })
+        return listCopy
+    }
+
+
+    // intial function for getting cities and weatherinfo
+
     const fetchWeatherDetails = async () => {
         const cities = await getCities()
         const weatherInfoForCities = await getWeatherInfoForCities(cities)
@@ -236,6 +277,13 @@ const Cities = ({isSorted}) => {
         setCitiesWithInfo(weatherInfoForCities)
        
     }
+
+
+
+   
+
+
+    // Use effects for intial rendering filtering and sorting
 
     useEffect(() => fetchWeatherDetails,[])
 
@@ -245,25 +293,53 @@ const Cities = ({isSorted}) => {
 
     useEffect(() => {
         if(isFiltered.isFiltered == false){
+            searchValue !== ''? 
+            setCitiesWithInfo(filterForSearchedCities(searchValue)):
             setCitiesWithInfo(initialCities)
         }else{
-            filterWeatherInfoForCities(isFiltered.filterBy)
+            var searchedList = filterForSearchedCities(searchValue)
+            filterWeatherInfoForCities(searchedList,isFiltered.filterBy)
         }
-    },[isFiltered])
+    },[isFiltered,searchValue])
+
+    // useEffect(()=>{
+    //     filterForSearchedCities(searchValue)
+    //     // console.log(searchValue);
+    // },[searchValue])
+
+
+
+
+
+
 
   return (
     <div>
         <div className='flex justify-between items-center w-full mb-16 px-16'>
-            <Search/>
+            <Search searchValue={searchValue} updateSearch={updateSearch}/>
             <Filter updateFiltered={updateFiltered}/>
         </div>
-        <div className='grid grid-cols-1 md:grid-cols-2 justify-items-center gap-5 md:gap-8 mb-16'>
-            {citiesWithInfo.map((item)=>{
-                return <City key={item.id} item={item}/>
-            })}
-        </div>
+
+        <div>
+        {
+            citiesWithInfo.length == 0 ?
+                <div className='flex flex-col justify-center items-center'>
+                    <h1 className='text-3xl text-[#40434bff] tracking-wider font-poppins mb-6'>
+                        No results found, try editing filters
+                    </h1>
+                    <img className='w-[100px]' src='/projectSvgs/snowImage.svg' alt="cloud png" />
+                </div>
+
+             :
+
+                <div className='grid grid-cols-1 md:grid-cols-2 justify-items-center gap-5 md:gap-8 mb-16'>
+                {citiesWithInfo.map((item)=>{
+                    return <City key={item.id} item={item}/>
+                })}
+                </div>
+        }
+        </div>      
     </div>
   )
 }
-// || item[firstDigitOfWeatherId] == '3'
 export default Cities
