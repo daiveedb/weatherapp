@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 const Search = ({searchValue,updateSearch}) => {
 
@@ -14,9 +14,9 @@ const Search = ({searchValue,updateSearch}) => {
   return (
     <div>
       <input 
-      className='p-3 capitalize bg-transparent text-sky-600 border border-sky-600 rounded-lg outline-none w-[300px]' 
+      className='p-[6px] sm:p-2 md:p-3 text-xs sm:text-sm md:text-base first-letter:capitalize bg-transparent text-sky-600 border border-sky-600 rounded-lg outline-none w-[150px] sm:w-[200px] md:w-[300px]' 
       type="text"
-      placeholder='Search for a City'
+      placeholder='Search for a city'
       value={searchValue}
       onChange={(e) => handleSearch(e.target.value)}
        />

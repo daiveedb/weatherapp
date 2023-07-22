@@ -7,7 +7,7 @@ const Filter = ({updateFiltered}) => {
     const handleFilter = (selected) =>{
         filterSelected = selected
 
-        if (filterSelected != 'none'){
+        if (filterSelected !== 'none'){
           updateFiltered(true,filterSelected)
         } else{
           updateFiltered(false,'none')
@@ -24,7 +24,7 @@ const Filter = ({updateFiltered}) => {
             <select
             defaultValue='default'
             onChange={(e)=> handleFilter(e.target.value)}
-            className='bg-transparent text-sky-600 font-bold border border-sky-600 px-1 py-1 sm:py-2 sm:px-2 md:py-3 md:px-3 rounded shadow-lg outline-none w-[150px] sm:w-[200px] md:w-[240px]'
+            className='bg-transparent text-sky-600 font-bold border border-sky-600 p-1 sm:p-2 md:p-3 rounded shadow-lg outline-none w-[150px] sm:w-[200px] md:w-[240px]'
             >
               <option value="none"> None</option>
               <option value="clear sky">Clear Sky</option>

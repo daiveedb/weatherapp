@@ -7,7 +7,6 @@ import Search from './Search';
 const Cities = ({isSorted}) => {
 
     const [searchValue, setSearchValue] = useState('')
-    
     const [isFiltered, setIsFiltered]= useState({
         isFiltered:false,
         filterBy:""
@@ -19,7 +18,7 @@ const Cities = ({isSorted}) => {
     // getting alist of popular cities
 
     const getCities = async () => {
-        const url = 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities?types=city&minPopulation=2000000&limit=&sort=name';
+        const url = 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities?types=city&minPopulation=2000000&limit=10&sort=name';
         const options = {
             method: 'GET',
             headers: {
@@ -40,7 +39,8 @@ const Cities = ({isSorted}) => {
     // getting actual weather for cities generated
 
     const getWeather = async (lat,long) => {
-        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=dcdc4d244bb99171abc7072ad680346c&units=metric`;
+        const key = 'dcdc4d244bb99171abc7072ad680346c'
+        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${key}&units=metric`;
         try {
             const response = await fetch(url);
             const result = await response.json();
@@ -99,12 +99,24 @@ const Cities = ({isSorted}) => {
             id:id,
             cityName:cityName,
             country:country,
-            temperature:weatherDetails.main.temp,
             population:population,
+            lat:lat,
+            long:long,
             
+            temperature:Math.round(weatherDetails.main.temp),
+            feels_like:Math.round(weatherDetails.main.feels_like),
+            temp_min:Math.round(weatherDetails.main.temp_min),
+            temp_max:Math.round(weatherDetails.main.temp_max),
+            humidity:weatherDetails.main.humidity,
+            pressure:weatherDetails.main.pressure,
+
+            sunrise:weatherDetails.sys.sunrise,
+            sunset:weatherDetails.sys.sunset,
+
             weatherId:weatherDetails.weather[0].id,
             weatherDescription: weatherDetails.weather[0].description,
             iconUrl:weatherDetails.weather[0].icon,
+
             cityImages:{
                 smallImage: cityImages.smallImage,
                 bigImage: cityImages.bigImage
@@ -118,11 +130,12 @@ const Cities = ({isSorted}) => {
     // sort cities by dropdown selecr
 
     const sortWeatherInfoForCities = (sortBy) =>{
+        var key = ''
 
         switch (sortBy) {
 
             case 'default':
-                var key = 'cityName'
+                key = 'cityName'
                 var listCopy = [...citiesWithInfo].sort((a,b) =>{
                     return a[key].localeCompare(b[key])
                 })
@@ -130,7 +143,7 @@ const Cities = ({isSorted}) => {
                 break;
 
             case 'temperature':
-                var key = 'temperature'
+                key = 'temperature'
                 var listCopy = [...citiesWithInfo].sort((a,b) =>{
                     return a[key] - b[key]
                 })
@@ -138,7 +151,7 @@ const Cities = ({isSorted}) => {
                 break;
 
             case 'temperature reversed':
-                var key = 'temperature'
+                key = 'temperature'
                 var listCopy = [...citiesWithInfo].sort((a,b) =>{
                     return  b[key] - a[key]
                 })
@@ -146,7 +159,7 @@ const Cities = ({isSorted}) => {
                 break;
 
             case 'population':
-                var key = 'population'
+                key = 'population'
                 var listCopy = [...citiesWithInfo].sort((a,b) =>{
                     return   a[key] - b[key]
                 })
@@ -154,7 +167,7 @@ const Cities = ({isSorted}) => {
                 break;
 
             case 'population reversed':
-                var key = 'population'
+                key = 'population'
                 var listCopy = [...citiesWithInfo].sort((a,b) =>{
                     return  b[key] - a[key]
                 })
@@ -280,9 +293,6 @@ const Cities = ({isSorted}) => {
 
 
 
-   
-
-
     // Use effects for intial rendering filtering and sorting
 
     useEffect(() => fetchWeatherDetails,[])
@@ -292,7 +302,7 @@ const Cities = ({isSorted}) => {
     }, [isSorted])
 
     useEffect(() => {
-        if(isFiltered.isFiltered == false){
+        if(isFiltered.isFiltered === false){
             searchValue !== ''? 
             setCitiesWithInfo(filterForSearchedCities(searchValue)):
             setCitiesWithInfo(initialCities)
@@ -302,10 +312,6 @@ const Cities = ({isSorted}) => {
         }
     },[isFiltered,searchValue])
 
-    // useEffect(()=>{
-    //     filterForSearchedCities(searchValue)
-    //     // console.log(searchValue);
-    // },[searchValue])
 
 
 
@@ -315,14 +321,14 @@ const Cities = ({isSorted}) => {
 
   return (
     <div>
-        <div className='flex justify-between items-center w-full mb-16 px-16'>
+        <div className='flex justify-between items-center w-full px-4 mb-16 md:px-16'>
             <Search searchValue={searchValue} updateSearch={updateSearch}/>
             <Filter updateFiltered={updateFiltered}/>
         </div>
 
         <div>
         {
-            citiesWithInfo.length == 0 ?
+            citiesWithInfo.length === 0 ?
                 <div className='flex flex-col justify-center items-center'>
                     <h1 className='text-3xl text-[#40434bff] tracking-wider font-poppins mb-6'>
                         No results found, try editing filters
