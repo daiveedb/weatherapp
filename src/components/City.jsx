@@ -22,9 +22,12 @@ const City = ({item}) => {
                 <p className='text-xs font-extralight tracking-tighter'>{item.country}</p>
                 <p className='text-xs sm:text-sm font-semibold text-gray-500 capitalize'>{item.weatherDescription}</p>
             </div>
-            <div className='flex flex-1 justify-end items-center'>
-                <img className='w-[50%] sm:w-[70%] pr-2 sm:pr-3 rounded-l-lg' src={iconUrl} alt="" /> 
-                <p className='text-sm sm:text-base'>{item.temperature}&deg;C</p>  
+            <div className='items-end'>
+                <div className='flex flex-1 justify-end items-center'>
+                    <img className='w-[50%] sm:w-[50%] pr-2 sm:pr-3 rounded-l-lg' src={iconUrl} alt="" /> 
+                    <p className='text-sm sm:text-base'>{item.temperature}&deg;C</p>  
+                </div>
+                <p className='tracking-wide font-light text-end text-gray-600'>{item.time}</p>
             </div>
         </div>
         

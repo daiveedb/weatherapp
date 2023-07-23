@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import City from './City';
 import Filter from './Filter';
 import Search from './Search';
+import PreloaderAnimation from './PreloaderAnimation';
 
 
 const Cities = ({isSorted}) => {
 
+    const moment = require('moment')
     const [searchValue, setSearchValue] = useState('')
     const [isFiltered, setIsFiltered]= useState({
         isFiltered:false,
@@ -13,12 +15,13 @@ const Cities = ({isSorted}) => {
     })
     const [initialCities, setInitialCities] = useState([])
     const [citiesWithInfo, setCitiesWithInfo] = useState([])
+    const [isloading,setIsLoading] = useState(true)
 
 
     // getting alist of popular cities
 
     const getCities = async () => {
-        const url = 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities?types=city&minPopulation=2000000&limit=10&sort=name';
+        const url = 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities?types=city&minPopulation=2000000&limit=4&sort=name';
         const options = {
             method: 'GET',
             headers: {
@@ -103,15 +106,17 @@ const Cities = ({isSorted}) => {
             lat:lat,
             long:long,
             
+            time:moment.unix(weatherDetails.dt * 1000).format('h:mm A').toLowerCase(),
             temperature:Math.round(weatherDetails.main.temp),
             feels_like:Math.round(weatherDetails.main.feels_like),
             temp_min:Math.round(weatherDetails.main.temp_min),
             temp_max:Math.round(weatherDetails.main.temp_max),
-            humidity:weatherDetails.main.humidity,
-            pressure:weatherDetails.main.pressure,
+            humidity:Math.round(weatherDetails.main.humidity),
+            pressure:Math.round(weatherDetails.main.pressure),
+            windSpeed:weatherDetails.wind.speed,
 
-            sunrise:weatherDetails.sys.sunrise,
-            sunset:weatherDetails.sys.sunset,
+            sunrise:moment.unix(weatherDetails.sys.sunrise).format('h:mm A').toLowerCase(),
+            sunset:moment.unix(weatherDetails.sys.sunset).format('h:mm A').toLowerCase(),
 
             weatherId:weatherDetails.weather[0].id,
             weatherDescription: weatherDetails.weather[0].description,
@@ -288,6 +293,7 @@ const Cities = ({isSorted}) => {
         const weatherInfoForCities = await getWeatherInfoForCities(cities)
         setInitialCities(weatherInfoForCities)
         setCitiesWithInfo(weatherInfoForCities)
+        setIsLoading(false)
        
     }
 
@@ -328,21 +334,24 @@ const Cities = ({isSorted}) => {
 
         <div>
         {
-            citiesWithInfo.length === 0 ?
-                <div className='flex flex-col justify-center items-center'>
-                    <h1 className='text-3xl text-[#40434bff] tracking-wider font-poppins mb-6'>
-                        No results found, try editing filters
-                    </h1>
-                    <img className='w-[100px]' src='/projectSvgs/snowImage.svg' alt="cloud png" />
-                </div>
-
-             :
-
-                <div className='grid grid-cols-1 md:grid-cols-2 justify-items-center gap-5 md:gap-8 mb-16'>
+            citiesWithInfo.length !== 0 ?
+            <div className='grid grid-cols-1 md:grid-cols-2 justify-items-center gap-5 md:gap-8 mb-16'>
                 {citiesWithInfo.map((item)=>{
                     return <City key={item.id} item={item}/>
                 })}
-                </div>
+            </div>
+        :
+            !isloading?
+
+             <div className='flex flex-col justify-center items-center'>
+                <h1 className='text-3xl text-[#40434bff] tracking-wider font-poppins mb-6'>
+                     No results found, try editing filters
+                </h1>
+                <img className='w-[100px]' src='/projectSvgs/snowImage.svg' alt="cloud png" />
+            </div>
+                :
+
+            <PreloaderAnimation/>               
         }
         </div>      
     </div>

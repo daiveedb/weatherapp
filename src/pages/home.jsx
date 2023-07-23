@@ -15,7 +15,7 @@ const Home = () => {
   }
 
   return (
-    <main>
+    <main className='bg-[beige] h-[100vh]'>
         <Navbar updateSorted={updateSorted}/>
         <Cities isSorted={isSorted}/>
     </main>
