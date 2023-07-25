@@ -19,94 +19,80 @@ const Cities = ({isSorted}) => {
 
     // getting alist of popular cities
 
+    
+
     const getCities = async () => {
 
-        const url1 = 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities?types=city&maxPopulation=21893095&limit=10&sort=-population';
-        const options = {
-            method: 'GET',
-            headers: {
-                'X-RapidAPI-Key': 'e40f407ef8mshd86ba4874a53172p14365bjsn3bd506c84483',
-                'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
-            }
-        };
-        
-        try {
-            const response = await fetch(url1, options);
-            const result = await response.json();
-            return result.data
-        } catch (error) {
-            console.error(error);
-        }
-    
-    }
+        let totalCities = []
 
-    // Getting more cities since im limited to 10 on the free API
-
-    const getCities2 = async() => {
-
-        setTimeout(2000)
-
-        const url2 = 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities?types=city&excludedCountryIds=CN%2CPK%2CSG&maxPopulation=14910351&limit=10&sort=-population';
-        const option2 = {
-            method: 'GET',
-            headers: {
-                'X-RapidAPI-Key': 'c6f1d1e81bmsh378da47209b8c0dp1ef54ejsnf48b28e81dc3',
-                'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
-            }
-        };
-        try {
-            const response = await fetch(url2,option2);
-            const result = await response.json();
-            return result.data
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    //     // Getting more cities since im limited to 10 on the free API
-
-    const getCities3 = async() => {
-
-        setTimeout(4000)
-
-         const url3 = 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities?types=city&excludedCountryIds=CN%2CSG%2CPK%2CIR%2CVN%2CIQ%2CCO%2CIN%2CMM%2CTR%2CCL%2CBR%2CRU%2CSD&maxPopulation=9000000&limit=10&sort=-population';
-            const options3 = {
-                method: 'GET',
-                headers: {
-                    'X-RapidAPI-Key': '172e9f93d6msh57352fe94d33a5ap16da53jsn85e0fd8f4cd2',
-                    'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
+        const urls = [
+            {
+                url: 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities?types=city&maxPopulation=21893095&limit=10&sort=-population',
+                options: {
+                    method: 'GET',
+                    headers: {
+                        'X-RapidAPI-Key': 'e40f407ef8mshd86ba4874a53172p14365bjsn3bd506c84483',
+                        'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
+                    }
                 }
-            };
-            try {
-                const response = await fetch(url3, options3);
-                const result = await response.json();
-                return result.data
-            } catch (error) {
-                console.error(error);
-            }
-    }
+            },
+            {
+                url: 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities?types=city&excludedCountryIds=CN%2CPK%2CSG&maxPopulation=14910351&limit=10&sort=-population',
+                options: {
+                    method: 'GET',
+                    headers: {
+                        'X-RapidAPI-Key': 'c6f1d1e81bmsh378da47209b8c0dp1ef54ejsnf48b28e81dc3',
+                        'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
+                    }
+                }
+            },
+            {
+                url: 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities?types=city&excludedCountryIds=CN%2CSG%2CPK%2CIR%2CVN%2CIQ%2CCO%2CIN%2CMM%2CTR%2CCL%2CBR%2CRU%2CSD&maxPopulation=9000000&limit=10&sort=-population',
+                options: {
+                    method: 'GET',
+                    headers: {
+                        'X-RapidAPI-Key': '172e9f93d6msh57352fe94d33a5ap16da53jsn85e0fd8f4cd2',
+                        'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
+                    }
+                }
+            },
+            {
+                url: 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities?types=city&excludedCountryIds=CN%2CIN%2CIR%2CVN%2CIQ%2CCO%2CSA%2CMM%2CCL%2CTR%2CTZ%2CTW%2CAF%2CJO%2CJP%2CNG%2CMA%2CDZ&maxPopulation=4869999&limit=10&sort=-population',                options: {
+                    method: 'GET',
+                    headers: {
+                        'X-RapidAPI-Key': '4ce995f6e7msha3914884fe478c2p1467edjsnbacf80e267c6',
+                        'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
+                    }
+                }
+            },
 
-    //     // Getting more cities since im limited to 10 on the free API
+        ]
 
-    const getCities4 = async() => {
+        async function fetchDataFromUrls(urls) {
+            const fetchPromises = urls.map(async (url, index) => {
+              await new Promise((resolve) => setTimeout(resolve, 1500 * index));
+              const response = await fetch(url.url, url.options);
+              const result = await response.json();
+              return result.data;
+            });
 
-        setTimeout(6000)
-
-        const url4 = 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities?types=city&excludedCountryIds=CN%2CPK%2CSG&maxPopulation=14910351&limit=10&sort=-population';
-        const option4 = {
-            method: 'GET',
-            headers: {
-                'X-RapidAPI-Key': 'c6f1d1e81bmsh378da47209b8c0dp1ef54ejsnf48b28e81dc3',
-                'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
-            }
-        };
-        try {
-            const response = await fetch(url4,option4);
-            const result = await response.json();
-            return result.data
-        } catch (error) {
-            console.error(error);
+            const dataArrays = await Promise.all(fetchPromises);
+            const totalCities = dataArrays.reduce((acc, data) => [...acc, ...data], []);
+          
+            return totalCities;
         }
+
+
+        totalCities = fetchDataFromUrls(urls)
+        .then((totalCities) => {
+          console.log(totalCities); 
+          return totalCities// Process the combined data from all URLs here
+        })
+        .catch((error) => {
+          console.error('An error occurred:', error);
+        });
+
+        return totalCities
     }
 
     // getting actual weather for cities generated
@@ -361,13 +347,7 @@ const Cities = ({isSorted}) => {
     // intial function for getting cities and weatherinfo
 
     const fetchWeatherDetails = async () => {
-        const cities1 = await getCities()
-        const cities2 = setTimeout(await getCities2(), 5000)
-        // const cities3 = await getCities3()
-        // const cities4 = await getCities4()
-        const totalCities = [cities1,cities2]
-        const cities = totalCities.flat()
-        console.log(cities);
+        const cities = await getCities()
         const weatherInfoForCities = await getWeatherInfoForCities(cities)
         setInitialCities(weatherInfoForCities)
         setCitiesWithInfo(weatherInfoForCities)
