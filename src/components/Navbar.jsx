@@ -31,7 +31,7 @@ const Navbar = ({updateSorted}) => {
                 onChange={(e)=> handleSort(e.target.value)}
                 className='bg-transparent text-[#40434bff] font-bold border border-[#40434bff] p-1 sm:p-2 md:p-3 rounded shadow-lg outline-none w-[150px] sm:w-[200px] md:w-[240px]'
                 >
-                  <option value="default"> Default</option>
+                  <option value="default">Sort: Default</option>
                   <option value="temperature reversed">Hottest</option>
                   <option value="temperature">Coldest</option>
                   <option value="population">Population (Ascending)</option>

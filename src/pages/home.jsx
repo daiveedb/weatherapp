@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Navbar from '../components/Navbar'
 import Cities from '../components/Cities'
+import Footer from '../components/Footer'
 
 const Home = () => {
 
@@ -18,6 +19,7 @@ const Home = () => {
     <main className='bg-[beige] h-[100vh]'>
         <Navbar updateSorted={updateSorted}/>
         <Cities isSorted={isSorted}/>
+        <Footer/>
     </main>
   )
 }

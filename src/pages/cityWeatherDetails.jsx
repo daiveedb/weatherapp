@@ -33,7 +33,7 @@ const CityWeatherDetails = () => {
 
   const getHourlyList = (hourlyResult) => {
     const newHourlyList = hourlyResult.map((item) => {
-      const datetime = item.dt
+      const datetime = item.dt + state.timezone
       const formattedTime = moment.unix(datetime).format('h A').toLowerCase()
       return {
         time:formattedTime,

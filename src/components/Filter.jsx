@@ -26,7 +26,7 @@ const Filter = ({updateFiltered}) => {
             onChange={(e)=> handleFilter(e.target.value)}
             className='bg-transparent text-sky-600 font-bold border border-sky-600 p-1 sm:p-2 md:p-3 rounded shadow-lg outline-none w-[150px] sm:w-[200px] md:w-[240px]'
             >
-              <option value="none"> None</option>
+              <option value="none">Filter: None</option>
               <option value="clear sky">Clear Sky</option>
               <option value="rain">Rain</option>
               <option value="thunderstorm">Thunderstorm</option>

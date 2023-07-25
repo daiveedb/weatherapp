@@ -17,11 +17,11 @@ const Cities = ({isSorted}) => {
     const [citiesWithInfo, setCitiesWithInfo] = useState([])
     const [isloading,setIsLoading] = useState(true)
 
-
     // getting alist of popular cities
 
     const getCities = async () => {
-        const url = 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities?types=city&minPopulation=2000000&limit=4&sort=name';
+
+        const url1 = 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities?types=city&maxPopulation=21893095&limit=10&sort=-population';
         const options = {
             method: 'GET',
             headers: {
@@ -31,7 +31,77 @@ const Cities = ({isSorted}) => {
         };
         
         try {
-            const response = await fetch(url, options);
+            const response = await fetch(url1, options);
+            const result = await response.json();
+            return result.data
+        } catch (error) {
+            console.error(error);
+        }
+    
+    }
+
+    // Getting more cities since im limited to 10 on the free API
+
+    const getCities2 = async() => {
+
+        setTimeout(2000)
+
+        const url2 = 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities?types=city&excludedCountryIds=CN%2CPK%2CSG&maxPopulation=14910351&limit=10&sort=-population';
+        const option2 = {
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Key': 'c6f1d1e81bmsh378da47209b8c0dp1ef54ejsnf48b28e81dc3',
+                'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
+            }
+        };
+        try {
+            const response = await fetch(url2,option2);
+            const result = await response.json();
+            return result.data
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    //     // Getting more cities since im limited to 10 on the free API
+
+    const getCities3 = async() => {
+
+        setTimeout(4000)
+
+         const url3 = 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities?types=city&excludedCountryIds=CN%2CSG%2CPK%2CIR%2CVN%2CIQ%2CCO%2CIN%2CMM%2CTR%2CCL%2CBR%2CRU%2CSD&maxPopulation=9000000&limit=10&sort=-population';
+            const options3 = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': '172e9f93d6msh57352fe94d33a5ap16da53jsn85e0fd8f4cd2',
+                    'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
+                }
+            };
+            try {
+                const response = await fetch(url3, options3);
+                const result = await response.json();
+                return result.data
+            } catch (error) {
+                console.error(error);
+            }
+    }
+
+    //     // Getting more cities since im limited to 10 on the free API
+
+    const getCities4 = async() => {
+
+        setTimeout(6000)
+
+        const url4 = 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities?types=city&excludedCountryIds=CN%2CPK%2CSG&maxPopulation=14910351&limit=10&sort=-population';
+        const option4 = {
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Key': 'c6f1d1e81bmsh378da47209b8c0dp1ef54ejsnf48b28e81dc3',
+                'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
+            }
+        };
+        try {
+            const response = await fetch(url4,option4);
             const result = await response.json();
             return result.data
         } catch (error) {
@@ -97,6 +167,7 @@ const Cities = ({isSorted}) => {
 
         const weatherDetails = await getWeather(lat,long)
         const cityImages = await getCityImages(cityName)
+        const timezone = weatherDetails.timezone - 3600
 
         return {
             id:id,
@@ -106,7 +177,8 @@ const Cities = ({isSorted}) => {
             lat:lat,
             long:long,
             
-            time:moment.unix(weatherDetails.dt * 1000).format('h:mm A').toLowerCase(),
+            timezone: timezone,
+            time:moment.unix(weatherDetails.dt + timezone).format('h:mm A').toLowerCase(),
             temperature:Math.round(weatherDetails.main.temp),
             feels_like:Math.round(weatherDetails.main.feels_like),
             temp_min:Math.round(weatherDetails.main.temp_min),
@@ -289,7 +361,13 @@ const Cities = ({isSorted}) => {
     // intial function for getting cities and weatherinfo
 
     const fetchWeatherDetails = async () => {
-        const cities = await getCities()
+        const cities1 = await getCities()
+        const cities2 = setTimeout(await getCities2(), 5000)
+        // const cities3 = await getCities3()
+        // const cities4 = await getCities4()
+        const totalCities = [cities1,cities2]
+        const cities = totalCities.flat()
+        console.log(cities);
         const weatherInfoForCities = await getWeatherInfoForCities(cities)
         setInitialCities(weatherInfoForCities)
         setCitiesWithInfo(weatherInfoForCities)
@@ -332,7 +410,7 @@ const Cities = ({isSorted}) => {
             <Filter updateFiltered={updateFiltered}/>
         </div>
 
-        <div>
+        <div className='bg-[beige]'>
         {
             citiesWithInfo.length !== 0 ?
             <div className='grid grid-cols-1 md:grid-cols-2 justify-items-center gap-5 md:gap-8 mb-16'>

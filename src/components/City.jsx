@@ -27,7 +27,7 @@ const City = ({item}) => {
                     <img className='w-[50%] sm:w-[50%] pr-2 sm:pr-3 rounded-l-lg' src={iconUrl} alt="" /> 
                     <p className='text-sm sm:text-base'>{item.temperature}&deg;C</p>  
                 </div>
-                <p className='tracking-wide font-light text-end text-gray-600'>{item.time}</p>
+                <p className='tracking-wide text-sm font-light text-end text-gray-600'>{item.time}</p>
             </div>
         </div>
         
