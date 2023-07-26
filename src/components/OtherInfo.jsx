@@ -26,7 +26,7 @@ const OtherInfo = ({state}) => {
             infoIcon:<GiSunset color='#dc4e0c'/>
         },
         {
-            info:'wind speed',
+            info:'wind',
             infoValue:state.windSpeed + ' Km/h',
             infoIcon:<FiWind color='#91817a'/>
         },
@@ -43,9 +43,9 @@ const OtherInfo = ({state}) => {
         {otherWeatherInfo.map((item) => {
             return(
             <div className='relative flex justify-between items-center border-gray-300 border-b-[1px] p-2 font-quickSand text-sky-600'>
-                <p className='text-3xl'>{item.infoIcon}</p>
-                <p className='absolute left-[50%] translate-x-[-50%] top-[50%] translate-y-[-50%] font-semibold text-gray-700 capitalize'>{item.info}</p>
-                <p>{item.infoValue}</p>
+                <p className='text-xl sm:text-xl md:text-3xl'>{item.infoIcon}</p>
+                <p className='text-sm sm:text-base absolute left-[50%] translate-x-[-50%] top-[50%] translate-y-[-50%] font-semibold text-gray-700 capitalize'>{item.info}</p>
+                <p className='text-sm md:text-base tracking-tighter'>{item.infoValue}</p>
             </div>)
         })}
     </div>

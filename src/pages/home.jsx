@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar'
 import Cities from '../components/Cities'
 import Footer from '../components/Footer'
 
+
 const Home = () => {
 
   const [isSorted, setIsSorted] = useState({

@@ -24,35 +24,35 @@ const Tomorrow = ({state,hourlyList}) => {
           {/* forecast grid */}
           <div className='grid grid-cols-4 justify-items-center pt-8 px-4'>
             {/* single hourly div */}
-            <div className='w-[95%] text-center'>
-              <h5 className='text-sm text-gray-600 pb-1'>{hourlyList[8].time}</h5>
+            <div className='w-[95%] text-center '>
+              <h5 className='text-xs md:text-sm text-gray-600'>{hourlyList[8].time}</h5>
               <div className='flex flex-col justify-center items-center'>
-                <img className='w-[60px]' src={hourlyList[8].iconId} alt="" />
-                <p>{hourlyList[8].temperature}&deg;</p>
+                <img className='w-[35px] sm:w-[45px] md:w-[60px]' src={hourlyList[8].iconId} alt="" />
+                <p className='text-sm md:text-base'>{hourlyList[8].temperature}&deg;</p>
+              </div>
+            </div>
+            {/* single hourly div */}
+            <div className='w-[95%] text-center border-gray-200 border-l-[1px]'>
+              <h5 className='text-xs md:text-sm text-gray-600'>{hourlyList[9].time}</h5>
+              <div className='flex flex-col justify-center items-center'>
+                <img className='w-[35px] sm:w-[45px] md:w-[60px]' src={hourlyList[9].iconId} alt="" />
+                <p className='text-sm md:text-base'>{hourlyList[9].temperature}&deg;</p>
+              </div>
+            </div>
+            {/* single hourly div */}
+            <div className='w-[95%] text-center border-gray-200 border-x-[1px]'>
+              <h5 className='text-xs md:text-sm text-gray-600'>{hourlyList[10].time}</h5>
+              <div className='flex flex-col justify-center items-center'>
+                <img className='w-[35px] sm:w-[45px] md:w-[60px]' src={hourlyList[10].iconId} alt="" />
+                <p className='text-sm md:text-base'>{hourlyList[10].temperature}&deg;</p>
               </div>
             </div>
             {/* single hourly div */}
             <div className='w-[95%] text-center'>
-              <h5 className='text-sm text-gray-600 pb-1'>{hourlyList[9].time}</h5>
+              <h5 className='text-xs md:text-sm text-gray-600'>{hourlyList[11].time}</h5>
               <div className='flex flex-col justify-center items-center'>
-                <img className='w-[60px]' src={hourlyList[9].iconId} alt="" />
-                <p>{hourlyList[9].temperature}&deg;</p>
-              </div>
-            </div>
-            {/* single hourly div */}
-            <div className='w-[95%] text-center'>
-              <h5 className='text-sm text-gray-600 pb-1'>{hourlyList[10].time}</h5>
-              <div className='flex flex-col justify-center items-center'>
-                <img className='w-[60px]' src={hourlyList[10].iconId} alt="" />
-                <p>{hourlyList[10].temperature}&deg;</p>
-              </div>
-            </div>
-            {/* single hourly div */}
-            <div className='w-[95%] text-center'>
-              <h5 className='text-sm text-gray-600 pb-1'>{hourlyList[11].time}</h5>
-              <div className='flex flex-col justify-center items-center'>
-                <img className='w-[60px]' src={hourlyList[11].iconId} alt="" />
-                <p>{hourlyList[11].temperature}&deg;</p>
+                <img className='w-[35px] sm:w-[45px] md:w-[60px]' src={hourlyList[11].iconId} alt="" />
+                <p className='text-sm md:text-base'>{hourlyList[11].temperature}&deg;</p>
               </div>
             </div>
           </div>

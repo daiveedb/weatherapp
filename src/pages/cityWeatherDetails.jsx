@@ -17,7 +17,6 @@ const CityWeatherDetails = () => {
   
   const navigate = useNavigate()
 
-
   const getHourlyWeatherInfo = async () => {
     const key = 'dcdc4d244bb99171abc7072ad680346c'
     const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${state.lat}&lon=${state.long}&cnt=12&appid=${key}&units=metric`
@@ -57,6 +56,9 @@ const CityWeatherDetails = () => {
   }
 
   useEffect(() => storeHourlyData,[])
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+  })
 
 
   return (
@@ -68,7 +70,7 @@ const CityWeatherDetails = () => {
     </div>
     <div className='absolute top-10 z-20 left-[50%] translate-x-[-50%] w-[80%] m-auto'>
       <div className='text-center pt-16 mb-20'>
-        <h1 className='text-6xl sm:text-8xl md:text-9xl text-white drop-shadow-2xl uppercase font-extrabold font-poppins'>{state.cityName}</h1>
+        <h1 className='text-4xl sm:text-6xl md:text-8xl lg:tex-9xl text-white drop-shadow-2xl uppercase font-extrabold font-poppins'>{state.cityName}</h1>
       </div>
 
       {isloading ? 
@@ -87,7 +89,7 @@ const CityWeatherDetails = () => {
           <OtherInfo state={state}/>
     </div>
     <div className='absolute left-10 top-5'>
-      <h1 onClick={() => navigate('/')} className='text-7xl cursor-pointer'>
+      <h1 onClick={() => navigate('/')} className='text-4xl md:text-7xl cursor-pointer'>
         <BiArrowBack color='white'/>
       </h1>
     </div>

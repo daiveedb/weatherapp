@@ -3,6 +3,7 @@ import City from './City';
 import Filter from './Filter';
 import Search from './Search';
 import PreloaderAnimation from './PreloaderAnimation';
+import Footer from '../components/Footer'
 
 
 const Cities = ({isSorted}) => {
@@ -70,7 +71,7 @@ const Cities = ({isSorted}) => {
 
         async function fetchDataFromUrls(urls) {
             const fetchPromises = urls.map(async (url, index) => {
-              await new Promise((resolve) => setTimeout(resolve, 1500 * index));
+              await new Promise((resolve) => setTimeout(resolve, 1700 * index));
               const response = await fetch(url.url, url.options);
               const result = await response.json();
               return result.data;
@@ -355,8 +356,6 @@ const Cities = ({isSorted}) => {
        
     }
 
-
-
     // Use effects for intial rendering filtering and sorting
 
     useEffect(() => fetchWeatherDetails,[])
@@ -377,23 +376,17 @@ const Cities = ({isSorted}) => {
     },[isFiltered,searchValue])
 
 
-
-
-
-
-
-
   return (
     <div>
-        <div className='flex justify-between items-center w-full px-4 mb-16 md:px-16'>
+        <div className='flex justify-between items-center w-full px-4 pb-10 md:px-16'>
             <Search searchValue={searchValue} updateSearch={updateSearch}/>
             <Filter updateFiltered={updateFiltered}/>
         </div>
 
-        <div className='bg-[beige]'>
+        <div className='bg-[beige] h-max'>
         {
             citiesWithInfo.length !== 0 ?
-            <div className='grid grid-cols-1 md:grid-cols-2 justify-items-center gap-5 md:gap-8 mb-16'>
+            <div className='grid grid-cols-1 md:grid-cols-2 justify-items-center gap-5 md:gap-8 pb-32'>
                 {citiesWithInfo.map((item)=>{
                     return <City key={item.id} item={item}/>
                 })}
@@ -411,7 +404,7 @@ const Cities = ({isSorted}) => {
 
             <PreloaderAnimation/>               
         }
-        </div>      
+        </div>   
     </div>
   )
 }
