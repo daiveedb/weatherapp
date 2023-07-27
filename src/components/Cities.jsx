@@ -358,7 +358,9 @@ const Cities = ({isSorted}) => {
 
     // Use effects for intial rendering filtering and sorting
 
-    useEffect(() => fetchWeatherDetails,[])
+    useEffect(() =>{
+        fetchWeatherDetails()
+    } ,[])
 
     useEffect(() => { 
             sortWeatherInfoForCities(isSorted.sortBy)
