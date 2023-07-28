@@ -4,6 +4,7 @@ import Filter from './Filter';
 import Search from './Search';
 import PreloaderAnimation from './PreloaderAnimation';
 import Footer from '../components/Footer'
+import { data } from 'autoprefixer';
 
 
 const Cities = ({isSorted}) => {
@@ -32,7 +33,7 @@ const Cities = ({isSorted}) => {
                 options: {
                     method: 'GET',
                     headers: {
-                        'X-RapidAPI-Key': 'e40f407ef8mshd86ba4874a53172p14365bjsn3bd506c84483',
+                        'X-RapidAPI-Key': process.env.REACT_APP_GEODB_API1,
                         'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
                     }
                 }
@@ -42,7 +43,7 @@ const Cities = ({isSorted}) => {
                 options: {
                     method: 'GET',
                     headers: {
-                        'X-RapidAPI-Key': 'c6f1d1e81bmsh378da47209b8c0dp1ef54ejsnf48b28e81dc3',
+                        'X-RapidAPI-Key': process.env.REACT_APP_GEODB_API2,
                         'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
                     }
                 }
@@ -52,7 +53,7 @@ const Cities = ({isSorted}) => {
                 options: {
                     method: 'GET',
                     headers: {
-                        'X-RapidAPI-Key': '172e9f93d6msh57352fe94d33a5ap16da53jsn85e0fd8f4cd2',
+                        'X-RapidAPI-Key': process.env.REACT_APP_GEODB_API3,
                         'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
                     }
                 }
@@ -61,7 +62,7 @@ const Cities = ({isSorted}) => {
                 url: 'https://wft-geo-db.p.rapidapi.com/v1/geo/cities?types=city&excludedCountryIds=CN%2CIN%2CIR%2CVN%2CIQ%2CCO%2CSA%2CMM%2CCL%2CTR%2CTZ%2CTW%2CAF%2CJO%2CJP%2CNG%2CMA%2CDZ&maxPopulation=4869999&limit=10&sort=-population',                options: {
                     method: 'GET',
                     headers: {
-                        'X-RapidAPI-Key': '4ce995f6e7msha3914884fe478c2p1467edjsnbacf80e267c6',
+                        'X-RapidAPI-Key': process.env.REACT_APP_GEODB_API4,
                         'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
                     }
                 }
@@ -71,7 +72,7 @@ const Cities = ({isSorted}) => {
 
         async function fetchDataFromUrls(urls) {
             const fetchPromises = urls.map(async (url, index) => {
-              await new Promise((resolve) => setTimeout(resolve, 1700 * index));
+              await new Promise((resolve) => setTimeout(resolve, 2000 * index));
               const response = await fetch(url.url, url.options);
               const result = await response.json();
               return result.data;
@@ -85,9 +86,8 @@ const Cities = ({isSorted}) => {
 
 
         totalCities = fetchDataFromUrls(urls)
-        .then((totalCities) => {
-          console.log(totalCities); 
-          return totalCities// Process the combined data from all URLs here
+        .then((res) => { 
+          return res
         })
         .catch((error) => {
           console.error('An error occurred:', error);
@@ -99,7 +99,7 @@ const Cities = ({isSorted}) => {
     // getting actual weather for cities generated
 
     const getWeather = async (lat,long) => {
-        const key = 'dcdc4d244bb99171abc7072ad680346c'
+        const key = process.env.REACT_APP_OPENWEATHERMAPAPI
         const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${key}&units=metric`;
         try {
             const response = await fetch(url);
@@ -114,7 +114,7 @@ const Cities = ({isSorted}) => {
 
     const getCityImages = async (cityName) => {
 
-        const unsplashAccessKey = 'geFlg0FE60aBxtP5eRauZXW621f5kzNmuX64hsDEa10'
+        const unsplashAccessKey = process.env.REACT_APP_UNSPLASH_API
         const url = `https://api.unsplash.com/search/photos/?query=${encodeURIComponent(cityName)}&client_id=${unsplashAccessKey}`
 
         try {
@@ -359,6 +359,7 @@ const Cities = ({isSorted}) => {
     // Use effects for intial rendering filtering and sorting
 
     useEffect(() =>{
+        console.log(process.env);
         fetchWeatherDetails()
     } ,[])
 
